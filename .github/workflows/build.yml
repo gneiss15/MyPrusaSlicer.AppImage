@@ -90,7 +90,7 @@ jobs:
     - name: Clone PrusaSlicer repository
       run: |
         set -x on
-	set -v
+        set -v
         git clone --recursive https://github.com/prusa3d/PrusaSlicer.git
         cd PrusaSlicer
         git fetch --tags
