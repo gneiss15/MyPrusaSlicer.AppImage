@@ -1,7 +1,7 @@
 #!/bin/bash
 
-set -x
-set -v
+#set -x
+#set -v
 
 GetReleases()
  {
@@ -31,6 +31,6 @@ if [ -z "${VERSION}" ]; then
   echo "VERSION=${VERSION}" >> $GITHUB_ENV
   echo "VERSION=version_${VERSION}" >> "$GITHUB_OUTPUT"
   echo "New release found: ${VERSION}"
-  echo "skip=true" >> "$GITHUB_OUTPUT"
+  echo "skip=fakse" >> "$GITHUB_OUTPUT"
 fi
 

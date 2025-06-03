@@ -17,7 +17,7 @@ jobs:
     steps:
     - name: Setup Env
       run: |
-        set -x
+        #set -x
         THIS_REPO_DIR=${GITHUB_WORKSPACE}/${GITHUB_REPOSITORY##*/}
         APT_CACHE_DIR=${THIS_REPO_DIR}/cache/var/cache/apt
         TOOLS_DIR=${THIS_REPO_DIR}/.github/tools
