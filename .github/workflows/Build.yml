@@ -41,10 +41,22 @@ jobs:
 
     - name: Show Skip
       run: |
+        set -x
+        set -v
         echo Skip: ${{ steps.Check_Releases.outputs.skip }}
+        if ${{ steps.Check_Releases.outputs.skip }}; then
+          echo skip
+         else
+          echo !skip
+        fi
+        if ${{ !steps.Check_Releases.outputs.skip }}; then
+          echo !skip
+         else
+          echo skip
+        fi
 
     - name: Mod Apt
-      if: ${{ !steps.Check_Releases.outputs.skip }}
+      if: ${{ steps.Check_Releases.outputs.skip }} 
       run: |
         $TOOLS_DIR/ModApt.sh
 
