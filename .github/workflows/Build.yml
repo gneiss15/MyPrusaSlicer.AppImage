@@ -39,6 +39,10 @@ jobs:
       run: |
         $TOOLS_DIR/CheckReleases.sh
 
+    - name: Show Skip
+      run: |
+        echo Skip: ${{ steps.Check_Releases.outputs.skip }}
+
     - name: Mod Apt
       if: ${{ !steps.Check_Releases.outputs.skip }}
       run: |
