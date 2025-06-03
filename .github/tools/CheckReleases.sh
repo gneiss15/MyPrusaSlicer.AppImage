@@ -31,6 +31,6 @@ if [ -z "${VERSION}" ]; then
   echo "VERSION=${VERSION}" >> $GITHUB_ENV
   echo "VERSION=version_${VERSION}" >> "$GITHUB_OUTPUT"
   echo "New release found: ${VERSION}"
-  echo "skip=fakse" >> "$GITHUB_OUTPUT"
+  echo "skip=false" >> "$GITHUB_OUTPUT"
 fi
 
