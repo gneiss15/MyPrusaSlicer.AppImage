@@ -28,6 +28,12 @@ jobs:
           echo "$i=$r" >> $GITHUB_ENV
         done
 
+    - name: Clone this repository
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ github.head_ref }}
+        path: '${{ env.THIS_REPO_DIR }}'
+
     - name: Check Releases and Exit if no new release
       id: Check_Releases
       run: |
@@ -37,12 +43,6 @@ jobs:
           exit 0  # Exit the job gracefully if no new release
         fi
         echo "VERSION=$VERSION" >> $GITHUB_ENV
-
-    - name: Clone this repository
-      uses: actions/checkout@v4
-      with:
-        ref: ${{ github.head_ref }}
-        path: '${{ env.THIS_REPO_DIR }}'
 
     - name: Mod Apt
       run: |

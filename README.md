@@ -3,6 +3,7 @@
 ### Download
 
 Latest: [Download](releases/latest)
+
 All Releases: [Releases](releases)
 
 ### Background
