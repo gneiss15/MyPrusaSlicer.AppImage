@@ -23,7 +23,6 @@ GetReleases "gneiss15/GithubActionsTest" "./GithubActionsTest.Releases"
 VERSION=$(head -1 <<< "$(comm -23 PrusaSlicer.Releases GithubActionsTest.Releases)")
 rm -f "./PrusaSlicer.Releases" "./GithubActionsTest.Releases"
 
-echo "VERSION: ${VERSION}"
 if [ -z "${VERSION}" ]; then
   echo "No new release found. Skipping rest of workflow."
   echo "skip=true" >> "$GITHUB_OUTPUT"

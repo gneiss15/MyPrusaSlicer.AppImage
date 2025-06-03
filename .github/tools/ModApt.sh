@@ -1,7 +1,7 @@
 #!/bin/bash
 
-set -x
-set -v
+#set -x
+#set -v
 
 echo -e "Binary::apt::APT::Keep-Downloaded-Packages "true";\nAPT::Keep-Downloaded-Packages "true";\n" | sudo tee /etc/apt/apt.conf.d/99x-my
 
