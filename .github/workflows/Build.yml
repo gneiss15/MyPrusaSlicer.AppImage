@@ -38,6 +38,7 @@ jobs:
       id: Check_Releases
       run: |
         $TOOLS_DIR/CheckReleases.sh
+        echo "VERSION: ${VERSION}"
         if [ -z "${VERSION}" ]; then
           echo "No new release found. Skipping rest of workflow."
           echo "skip=true" >> "$GITHUB_OUTPUT"
