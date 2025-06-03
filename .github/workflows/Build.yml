@@ -45,14 +45,14 @@ jobs:
         set -v
         echo Skip: ${{ steps.Check_Releases.outputs.skip }}
         if ${{ steps.Check_Releases.outputs.skip }}; then
-          echo skip
+          echo "skip"
          else
-          echo !skip
+          echo "!skip"
         fi
-        if ${{ !steps.Check_Releases.outputs.skip }}; then
-          echo !skip
+        if ! ${{ steps.Check_Releases.outputs.skip }}; then
+          echo "!skip"
          else
-          echo skip
+          echo "skip"
         fi
 
     - name: Mod Apt
