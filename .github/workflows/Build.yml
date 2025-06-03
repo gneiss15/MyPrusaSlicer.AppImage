@@ -1,4 +1,4 @@
-name: Test
+name: Build
 on:
   workflow_dispatch:
   push:
@@ -57,9 +57,9 @@ jobs:
     - name: Clone the PrusaSlicer repository
       uses: actions/checkout@v4
       with:
-        ref: prusa3d/PrusaSlicer
-        path: '${{ env.PRUSA_REPO_DIR }}'
+        repository: prusa3d/PrusaSlicer
         ref: 'version_${{ env.VERSION }}'
+        path: '${{ env.PRUSA_REPO_DIR }}'
 
     - name: Build
       run: |
