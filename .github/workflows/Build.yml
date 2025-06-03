@@ -38,30 +38,38 @@ jobs:
       id: Check_Releases
       run: |
         $TOOLS_DIR/CheckReleases.sh
-        if [ -z "$VERSION" ]; then
-          echo "No new release found. Exiting."
-          exit 0  # Exit the job gracefully if no new release
+        if [ -z "${VERSION}" ]; then
+          echo "No new release found. Skipping rest of workflow."
+          echo "skip=true" >> "$GITHUB_OUTPUT"
+         else
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "VERSION=version_${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "New release found: ${VERSION}"
+          echo "skip=true" >> "$GITHUB_OUTPUT"
         fi
-        echo "VERSION=$VERSION" >> $GITHUB_ENV
 
     - name: Mod Apt
+      if: ${{ !steps.Check_Releases.outputs.skip }}
       run: |
         $TOOLS_DIR/ModApt.sh
 
     - name: Commit all changed files back to the repository
+      if: ${{ !steps.Check_Releases.outputs.skip }}
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
         commit_message: Auto-Commit
         repository: ${{ env.THIS_REPO_DIR }}
 
     - name: Clone the PrusaSlicer repository
+      if: ${{ !steps.Check_Releases.outputs.skip }}
       uses: actions/checkout@v4
       with:
         repository: prusa3d/PrusaSlicer
-        ref: 'version_${{ env.VERSION }}'
+        ref: ${{ !steps.Check_Releases.outputs.VERSION }}
         path: '${{ env.PRUSA_REPO_DIR }}'
 
     - name: Build
+      if: ${{ !steps.Check_Releases.outputs.skip }}
       run: |
         $TOOLS_DIR/Build.sh
 

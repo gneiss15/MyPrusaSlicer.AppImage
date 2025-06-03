@@ -1,7 +1,7 @@
 #!/bin/bash
 
-set -x
-set -v
+#set -x
+#set -v
 
 GetReleases()
  {
@@ -20,7 +20,6 @@ GetReleases()
 cd "$GITHUB_WORKSPACE"
 GetReleases "prusa3d/PrusaSlicer" "./PrusaSlicer.Releases"
 GetReleases "gneiss15/GithubActionsTest" "./GithubActionsTest.Releases"
-VERSIONS="$(comm -23 PrusaSlicer.Releases GithubActionsTest.Releases)"
-export VERSION=${VERSIONS%% *}
+export VERSION=$(head -1 <<< "$(comm -23 PrusaSlicer.Releases GithubActionsTest.Releases)")
 rm -f "./PrusaSlicer.Releases" "./GithubActionsTest.Releases"
 
