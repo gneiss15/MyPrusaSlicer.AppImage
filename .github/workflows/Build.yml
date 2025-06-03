@@ -38,16 +38,6 @@ jobs:
       id: Check_Releases
       run: |
         $TOOLS_DIR/CheckReleases.sh
-        echo "VERSION: ${VERSION}"
-        if [ -z "${VERSION}" ]; then
-          echo "No new release found. Skipping rest of workflow."
-          echo "skip=true" >> "$GITHUB_OUTPUT"
-         else
-          echo "VERSION=${VERSION}" >> $GITHUB_ENV
-          echo "VERSION=version_${VERSION}" >> "$GITHUB_OUTPUT"
-          echo "New release found: ${VERSION}"
-          echo "skip=true" >> "$GITHUB_OUTPUT"
-        fi
 
     - name: Mod Apt
       if: ${{ !steps.Check_Releases.outputs.skip }}

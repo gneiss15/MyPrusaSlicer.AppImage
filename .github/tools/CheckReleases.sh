@@ -20,6 +20,17 @@ GetReleases()
 cd "$GITHUB_WORKSPACE"
 GetReleases "prusa3d/PrusaSlicer" "./PrusaSlicer.Releases"
 GetReleases "gneiss15/GithubActionsTest" "./GithubActionsTest.Releases"
-export VERSION=$(head -1 <<< "$(comm -23 PrusaSlicer.Releases GithubActionsTest.Releases)")
+VERSION=$(head -1 <<< "$(comm -23 PrusaSlicer.Releases GithubActionsTest.Releases)")
 rm -f "./PrusaSlicer.Releases" "./GithubActionsTest.Releases"
+
+echo "VERSION: ${VERSION}"
+if [ -z "${VERSION}" ]; then
+  echo "No new release found. Skipping rest of workflow."
+  echo "skip=true" >> "$GITHUB_OUTPUT"
+ else
+  echo "VERSION=${VERSION}" >> $GITHUB_ENV
+  echo "VERSION=version_${VERSION}" >> "$GITHUB_OUTPUT"
+  echo "New release found: ${VERSION}"
+  echo "skip=true" >> "$GITHUB_OUTPUT"
+fi
 
