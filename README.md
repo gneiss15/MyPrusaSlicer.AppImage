@@ -2,9 +2,8 @@
 
 ### Download
 
-Latest: https://github.com/gneiss15/PrusaSlicer.AppImage/releases/latest
-
-All Releases: https://github.com/gneiss15/PrusaSlicer.AppImage/releases
+Latest: [Download](releases/latest)
+All Releases: [Releases](releases)
 
 ### Background
 

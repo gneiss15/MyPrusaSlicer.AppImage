@@ -1,0 +1,67 @@
+name: Test
+on:
+  workflow_dispatch:
+  push:
+permissions:
+  actions: write
+  contents: write
+defaults:
+  run:
+    shell: bash
+env:
+  GH_TOKEN: ${{ github.token }}
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    #timeout-minutes: 180
+    steps:
+    - name: Setup Env
+      run: |
+        set -x
+        THIS_REPO_DIR=${GITHUB_WORKSPACE}/${GITHUB_REPOSITORY##*/}
+        APT_CACHE_DIR=${THIS_REPO_DIR}/cache/var/cache/apt
+        TOOLS_DIR=${THIS_REPO_DIR}/.github/tools
+        PRUSA_REPO_DIR=prusa3d/PrusaSlicer
+
+        for i in THIS_REPO_DIR APT_CACHE_DIR TOOLS_DIR PRUSA_REPO_DIR; do
+          eval "r=\"\$$i\""
+          echo "$i=$r" >> $GITHUB_ENV
+        done
+
+    - name: Check Releases and Exit if no new release
+      id: Check_Releases
+      run: |
+        $TOOLS_DIR/CheckReleases.sh
+        if [ -z "$VERSION" ]; then
+          echo "No new release found. Exiting."
+          exit 0  # Exit the job gracefully if no new release
+        fi
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+    - name: Clone this repository
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ github.head_ref }}
+        path: '${{ env.THIS_REPO_DIR }}'
+
+    - name: Mod Apt
+      run: |
+        $TOOLS_DIR/ModApt.sh
+
+    - name: Commit all changed files back to the repository
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: Auto-Commit
+        repository: ${{ env.THIS_REPO_DIR }}
+
+    - name: Clone the PrusaSlicer repository
+      uses: actions/checkout@v4
+      with:
+        ref: prusa3d/PrusaSlicer
+        path: '${{ env.PRUSA_REPO_DIR }}'
+        ref: 'version_${{ env.VERSION }}'
+
+    - name: Build
+      run: |
+        $TOOLS_DIR/Build.sh
+
