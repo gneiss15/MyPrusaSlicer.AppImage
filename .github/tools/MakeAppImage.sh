@@ -3,39 +3,8 @@
 set -x
 set -v
 
-cd "$PRUSA_REPO_DIR"
-PACKAGE=PrusaSlicer
-
-# Change Version-Info from ...UNKNOW to ...gneiss15
-sed -i "s/UNKNOWN/gneiss15/g" version.inc
-
-# Needed till Eigen Checksum fixed
-sed -i "s/URL_HASH.*//g" deps/+Eigen/Eigen.cmake
-#sed -i "s/e09b89aae054e9778ee3f606192ee76d645eec82c402c01c648b1fe46b6b9857/4815118c085ff1d5a21f62218a3b2ac62555e9b8d7bacd5093892398e7a92c4b/g" deps/+Eigen/Eigen.cmake
-
-# Download GMP
-rm -rf ./deps/build/destdir/*
-mkdir -p ./deps/download/GMP
-test -r ./deps/download/GMP/gmp-6.2.1.tar.bz2 || curl -o ./deps/download/GMP/gmp-6.2.1.tar.bz2 https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.bz2
-
-# Build dependencies
-cd "$PRUSA_REPO_DIR"
-cd "deps"
-mkdir -p build
-cd build
-cmake .. -DDEP_WX_GTK3=ON -DDEP_DOWNLOAD_DIR=$(pwd)/../download -DBOOST_ROOT=$(pwd)/../build/destdir/usr/local
-make -j $(nproc)
-
-# Build PrusaSlicer
-cd "$PRUSA_REPO_DIR"
-mkdir -p build
-cd build
-cmake .. -DSLIC3R_STATIC=1 -DSLIC3R_GTK=3 -DSLIC3R_PCH=OFF -DCMAKE_PREFIX_PATH=$(pwd)/../deps/build/destdir/usr/local -DCMAKE_INSTALL_PREFIX=/usr
-make -j $(nproc)
-sudo make install
-#find ../deps/build/destdir/usr/local
-
 # Vars
+PACKAGE=PrusaSlicer
 DESKTOP=/usr/resources/applications/${PACKAGE}.desktop
 ICON=/usr/resources/icons/${PACKAGE}.png
 APP_DIR="$PRUSA_REPO_DIR/AppDir"
@@ -64,7 +33,6 @@ cp "$ICON"              ./
 ln -s ./usr/share        ./share
 ln -s ./usr/resources    ./resources
 
-
 # ADD LIBRARIES
 rm -f ./lib4bin
 wget "https://raw.githubusercontent.com/VHSgunzo/sharun/refs/tags/v0.4.4/lib4bin" -O ./lib4bin
@@ -81,8 +49,15 @@ xvfb-run -a -- ./lib4bin -p -v -e -s -k \
   /usr/lib/"$ARCH"-linux-gnu/libvulkan* \
   /usr/lib/"$ARCH"-linux-gnu/dri/*
 
+# Test
+ls -la /usr/bin/OCCTWrapper.so || true
+ls -la ../lib/bin/OCCTWrapper.so || true
+ls -la ./bin/OCCTWrapper.so || true
+
 # Prusa installs this library in bin normally, so we will place a symlink just in case it is needed
-ln -s ../lib/bin/OCCTWrapper.so ./bin/OCCTWrapper.so
+if [ -f ../lib/bin/OCCTWrapper.so ]; then
+  ln -s ../lib/bin/OCCTWrapper.so ./bin/OCCTWrapper.so
+fi
 
 # NixOS does not have /usr/lib/locale nor /usr/share/locale, which PrusaSlicer expects
 cp -r /usr/lib/locale ./lib/

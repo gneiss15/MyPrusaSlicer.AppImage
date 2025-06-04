@@ -1,4 +1,4 @@
-name: Build
+name: Build PrusaSlicer AppImage
 on:
   workflow_dispatch:
   push:
@@ -59,8 +59,41 @@ jobs:
         ref: '${{ steps.Check_Releases.outputs.VERSION }}'
         path: '${{ env.PRUSA_REPO_DIR }}'
 
-    - name: Build
+    - name: PrepareForBuild
       if: ! ${{ steps.Check_Releases.outputs.skip }} 
       run: |
-        $TOOLS_DIR/Build.sh
+        cd "$PRUSA_REPO_DIR"
+        # Change Version-Info from ...UNKNOW to ...gneiss15
+        sed -i "s/UNKNOWN/gneiss15/g" version.inc
+        # Needed till Eigen Checksum fixed
+        sed -i "s/URL_HASH.*//g" deps/+Eigen/Eigen.cmake
+        #sed -i "s/e09b89aae054e9778ee3f606192ee76d645eec82c402c01c648b1fe46b6b9857/4815118c085ff1d5a21f62218a3b2ac62555e9b8d7bacd5093892398e7a92c4b/g" deps/+Eigen/Eigen.cmake
+        
+        # Download/Copy GMP
+        rm -rf ./deps/build/destdir/*
+        mkdir -p ./deps/download/GMP
+        test -r ./deps/download/GMP/gmp-6.2.1.tar.bz2 || cp $TOOLS_DIR/gmp-6.2.1.tar.bz2 ./deps/download/GMP/gmp-6.2.1.tar.bz2
+        #test -r ./deps/download/GMP/gmp-6.2.1.tar.bz2 || curl -o ./deps/download/GMP/gmp-6.2.1.tar.bz2 https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.bz2
+
+    - name: BuildDependencies
+      if: ! ${{ steps.Check_Releases.outputs.skip }} 
+      run: |
+        mkdir -p "$PRUSA_REPO_DIR/deps/build"
+        cd "$PRUSA_REPO_DIR/deps/build"
+        cmake .. -DDEP_WX_GTK3=ON -DDEP_DOWNLOAD_DIR=$(pwd)/../download -DBOOST_ROOT=$(pwd)/../build/destdir/usr/local
+        make -j $(nproc)
+
+    - name: BuildPrusaSlicer
+      if: ! ${{ steps.Check_Releases.outputs.skip }} 
+      run: |
+        mkdir -p "$PRUSA_REPO_DIR/build"
+        cd "$PRUSA_REPO_DIR/build"
+        cmake .. -DSLIC3R_STATIC=1 -DSLIC3R_GTK=3 -DSLIC3R_PCH=OFF -DCMAKE_PREFIX_PATH=$(pwd)/../deps/build/destdir/usr/local -DCMAKE_INSTALL_PREFIX=/usr
+        make -j $(nproc)
+        sudo make install
+
+    - name: MakeAppImage
+      if: ! ${{ steps.Check_Releases.outputs.skip }} 
+      run: |
+        $TOOLS_DIR/MakeAppImage.sh
 
