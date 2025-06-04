@@ -49,14 +49,9 @@ xvfb-run -a -- ./lib4bin -p -v -e -s -k \
   /usr/lib/"$ARCH"-linux-gnu/libvulkan* \
   /usr/lib/"$ARCH"-linux-gnu/dri/*
 
-# Test
-ls -la /usr/bin/OCCTWrapper.so || true
-ls -la ../lib/bin/OCCTWrapper.so || true
-ls -la ./bin/OCCTWrapper.so || true
-
 # Prusa installs this library in bin normally, so we will place a symlink just in case it is needed
-if [ -f ../lib/bin/OCCTWrapper.so ]; then
-  ln -s ../lib/bin/OCCTWrapper.so ./bin/OCCTWrapper.so
+if [ -f ./shared/lib/bin/OCCTWrapper.so ]; then
+  ln -s ./shared/lib/bin/OCCTWrapper.so ./bin/OCCTWrapper.so
 fi
 
 # NixOS does not have /usr/lib/locale nor /usr/share/locale, which PrusaSlicer expects
@@ -84,9 +79,9 @@ wget -q "$APPIMAGETOOL" -O ./appimagetool
 chmod +x ./appimagetool
 
 #UNUSED_APPIMAGETOOL_OPTS=" --comp zstd --mksquashfs-opt -Xcompression-level --mksquashfs-opt 22 "
-./appimagetool -n -u "$UPINFO" "$APP_DIR" "${THIS_REPO_DIR}/${PACKAGE}-${VERSION}-${ARCH}.AppImage"
+./appimagetool -n -u "$UPINFO" "$APP_DIR" "${THIS_REPO_DIR}/${PACKAGE}-${VERSION}-${ARCH}_GN.AppImage"
 
-rm -rf "$PRUSA_REPO_DIR"
+#rm -rf "$PRUSA_REPO_DIR"
 
 # Upload to GitHub Releases
 cd "${THIS_REPO_DIR}"
