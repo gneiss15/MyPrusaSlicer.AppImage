@@ -89,7 +89,7 @@ cd "${THIS_REPO_DIR}"
 #cd "$GITHUB_WORKSPACE"
 list=$(gh release list -R "$1" --json tagName | jq -r 'map(select(true))[] | (.tagName)');
 for i in $list; do
-  if [ "$i" = "${VERSION} ]; then
+  if [ "$i" = "${VERSION}" ]; then
     gh release delete $VERSION -y
   fi
 done
