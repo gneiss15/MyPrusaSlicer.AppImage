@@ -79,7 +79,8 @@ wget -q "$APPIMAGETOOL" -O ./appimagetool
 chmod +x ./appimagetool
 
 #UNUSED_APPIMAGETOOL_OPTS=" --comp zstd --mksquashfs-opt -Xcompression-level --mksquashfs-opt 22 "
-./appimagetool -n -u "$UPINFO" "$APP_DIR" "${THIS_REPO_DIR}/${PACKAGE}-${VERSION}-${ARCH}_GN.AppImage"
+cd "${THIS_REPO_DIR}"
+../appimagetool -n -u "$UPINFO" "$APP_DIR" "${THIS_REPO_DIR}/${PACKAGE}-${VERSION}-${ARCH}_GN.AppImage"
 
 #rm -rf "$PRUSA_REPO_DIR"
 
