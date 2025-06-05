@@ -2,9 +2,9 @@
 
 ### Download
 
-Latest: [Download](releases/latest)
+Latest: [Download](/releases/latest)
 
-All Releases: [Releases](releases)
+All Releases: [Releases](/releases)
 
 ### Background
 

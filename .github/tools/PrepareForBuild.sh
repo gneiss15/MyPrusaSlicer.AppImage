@@ -9,8 +9,10 @@ cd "$PRUSA_REPO_DIR"
 sed -i "s/UNKNOWN/gneiss15/g" version.inc
 
 # Fixes
-if dpkg --compare-versions "$VERSION" "eq" "2.9.0"; then
+if dpkg --compare-versions "$VERSION" "le" "2.9.2"; then
   sed -i "s/URL_HASH.*//g" deps/+Eigen/Eigen.cmake	# Needed till Eigen Checksum fixed
+fi
+if dpkg --compare-versions "$VERSION" "lt" "2.9.2"; then
   sed -i "s/mpfr-current/mpfr-4.2.1/g" deps/+MPFR/MPFR.cmake
 fi
 #sed -i "s/e09b89aae054e9778ee3f606192ee76d645eec82c402c01c648b1fe46b6b9857/4815118c085ff1d5a21f62218a3b2ac62555e9b8d7bacd5093892398e7a92c4b/g" deps/+Eigen/Eigen.cmake
