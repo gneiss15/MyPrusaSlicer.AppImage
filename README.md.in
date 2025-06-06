@@ -2,9 +2,9 @@
 
 ### Download
 
-Latest: [Download](/../../releases/latest)
+Latest: [Download](${{ GITHUB_REPOSITORY }}/releases/latest)
 
-All Releases: [Releases](/../../releases)
+All Releases: [Releases](${{ GITHUB_REPOSITORY }}/releases)
 
 ### Background
 
