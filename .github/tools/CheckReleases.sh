@@ -17,11 +17,14 @@ GetReleases()
   rm -f $tmpfile
  }
 
+THIS_REPO=$GITHUB_REPOSITORY
+PRUSA_REPO=prusa3d/PrusaSlicer
+
 cd "$GITHUB_WORKSPACE"
-GetReleases "prusa3d/PrusaSlicer" "./PrusaSlicer.Releases"
-GetReleases "gneiss15/GithubActionsTest" "./GithubActionsTest.Releases"
-VERSION=$(head -1 <<< "$(comm -23 PrusaSlicer.Releases GithubActionsTest.Releases)")
-rm -f "./PrusaSlicer.Releases" "./GithubActionsTest.Releases"
+GetReleases "$PRUSA_REPO" "./Prusa.Releases"
+GetReleases "$THIS_REPO" "./This.Releases"
+VERSION=$(head -1 <<< "$(comm -23 Prusa.Releases This.Releases)")
+rm -f "./Prusa.Releases" "./This.Releases"
 
 if [ -z "${VERSION}" ]; then
   echo "No new release found. Skipping rest of workflow."
