@@ -6,7 +6,7 @@
 cd "$PRUSA_REPO_DIR"
 
 # Change Version-Info from ...UNKNOW to ...gneiss15
-sed -i "s/UNKNOWN/gneiss15/g" version.inc
+sed -i "s/UNKNOWN/-gneiss15+UNKNOWN/g" version.inc
 
 # Fixes
 if dpkg --compare-versions "$VERSION" "le" "2.9.2"; then
