@@ -16,6 +16,7 @@ jobs:
     #timeout-minutes: 180
     outputs:
       output1: ${{ steps.Check_Releases.outputs.skip }}
+      output2: ${{ steps.Check_Releases.outputs.skip2 }}
     steps:
     - name: Setup Env
       run: |
