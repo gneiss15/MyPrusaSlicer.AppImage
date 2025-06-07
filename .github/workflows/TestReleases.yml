@@ -14,9 +14,9 @@ jobs:
   linux:
     runs-on: ubuntu-latest
     #timeout-minutes: 180
-    outputs:
-      output1: ${{ steps.CheckSkips.outputs.skip }}
-      output2: ${{ steps.CheckSkips.outputs.skip2 }}
+    #outputs:
+    #  output1: ${{ steps.CheckSkips.outputs.skip }}
+    #  output2: ${{ steps.CheckSkips.outputs.skip2 }}
     steps:
     - name: Set skip(s)
       id: CheckSkips
