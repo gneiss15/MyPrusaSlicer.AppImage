@@ -28,11 +28,11 @@ rm -f "./Prusa.Releases" "./This.Releases"
 
 if [ -z "${VERSION}" ]; then
   echo "No new release found. Skipping rest of workflow."
-  echo "skip=true" >> "$GITHUB_OUTPUT"
+  echo "skip=true" >> $GITHUB_OUTPUT
  else
   echo "VERSION=${VERSION}" >> $GITHUB_ENV
-  echo "VERSION=version_${VERSION}" >> "$GITHUB_OUTPUT"
+  echo "VERSION=version_${VERSION}" >> $GITHUB_OUTPUT
   echo "New release found: ${VERSION}"
-  echo "skip=false" >> "$GITHUB_OUTPUT"
+  echo "skip=false" >> $GITHUB_OUTPUT
 fi
 
