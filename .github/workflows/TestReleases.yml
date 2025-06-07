@@ -31,8 +31,8 @@ jobs:
     - name: Check Releases and Skip Rest of Jobs if no new release
       id: Check_Releases
       run: |
-        echo "skip=true" >> $GITHUB_OUTPUT
-        echo "skip2=false" >> $GITHUB_OUTPUT
+        echo "skip=1" >> $GITHUB_OUTPUT
+        echo "skip2=0" >> $GITHUB_OUTPUT
 
     - name: Show
       run: |
