@@ -14,6 +14,8 @@ jobs:
   linux:
     runs-on: ubuntu-latest
     #timeout-minutes: 180
+    outputs:
+      output1: ${{ steps.Check_Releases.outputs.skip }}
     steps:
     - name: Setup Env
       run: |
@@ -40,22 +42,22 @@ jobs:
         echo steps.Check_Releases.outputs.skip2: ${{ steps.Check_Releases.outputs.skip2 }}
 
     - name: Show if skip false
-      if: ${{ steps.Check_Releases.outputs.skip }} == "false"
+      if: ${{ ! steps.Check_Releases.outputs.skip }}
       run: |
         echo skip == false
 
     - name: Show if skip true
-      if: ${{ steps.Check_Releases.outputs.skip }} == "true"
+      if: ${{ steps.Check_Releases.outputs.skip }}
       run: |
         echo skip == false
 
     - name: Show if skip2 false
-      if: ${{ steps.Check_Releases.outputs.skip2 }} == "false"
+      if: ${{ ! steps.Check_Releases.outputs.skip2 }}
       run: |
         echo skip2 == false
 
     - name: Show if skip2 true
-      if: ${{ steps.Check_Releases.outputs.skip2 }} == "true"
+      if: ${{ steps.Check_Releases.outputs.skip2 }}
       run: |
         echo skip2 == false
 
