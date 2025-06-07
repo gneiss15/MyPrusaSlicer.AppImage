@@ -15,50 +15,41 @@ jobs:
     runs-on: ubuntu-latest
     #timeout-minutes: 180
     outputs:
-      output1: ${{ steps.Check_Releases.outputs.skip }}
-      output2: ${{ steps.Check_Releases.outputs.skip2 }}
+      output1: ${{ steps.CheckSkips.outputs.skip }}
+      output2: ${{ steps.CheckSkips.outputs.skip2 }}
     steps:
-    - name: Setup Env
-      run: |
-        #set -x
-        THIS_REPO_DIR=${GITHUB_WORKSPACE}/${GITHUB_REPOSITORY##*/}
-        APT_CACHE_DIR=${THIS_REPO_DIR}/cache/var/cache/apt
-        TOOLS_DIR=${THIS_REPO_DIR}/.github/tools
-        PRUSA_REPO_DIR=${GITHUB_WORKSPACE}/PrusaSlicer
-
-        for i in THIS_REPO_DIR APT_CACHE_DIR TOOLS_DIR PRUSA_REPO_DIR; do
-          eval "r=\"\$$i\""
-          echo "$i=$r" >> $GITHUB_ENV
-        done
-
-    - name: Check Releases and Skip Rest of Jobs if no new release
-      id: Check_Releases
+    - name: Set skip(s)
+      id: CheckSkips
       run: |
         echo "skip=true" >> $GITHUB_OUTPUT
         echo "skip2=false" >> $GITHUB_OUTPUT
 
     - name: Show
       run: |
-        echo steps.Check_Releases.outputs.skip: ${{ steps.Check_Releases.outputs.skip }}
-        echo steps.Check_Releases.outputs.skip2: ${{ steps.Check_Releases.outputs.skip2 }}
+        echo steps.CheckSkips.outputs.skip: ${{ steps.CheckSkips.outputs.skip }}
+        echo steps.CheckSkips.outputs.skip2: ${{ steps.CheckSkips.outputs.skip2 }}
 
     - name: Show if skip false
-      if: ${{ ! steps.Check_Releases.outputs.skip }}
+      #if: ${{ ! steps.CheckSkips.outputs.skip }}
+      if: steps.CheckSkips.outputs.skip == 'false'
       run: |
         echo skip == false
 
     - name: Show if skip true
-      if: ${{ steps.Check_Releases.outputs.skip }}
+      #if: ${{ steps.CheckSkips.outputs.skip }}
+      if: steps.CheckSkips.outputs.skip == 'true'
       run: |
-        echo skip == false
+        echo skip == true
 
     - name: Show if skip2 false
-      if: ${{ ! steps.Check_Releases.outputs.skip2 }}
+      #if: ${{ ! steps.CheckSkips.outputs.skip2 }}
+      if: steps.CheckSkips.outputs.skip2 == 'false'
       run: |
         echo skip2 == false
 
     - name: Show if skip2 true
-      if: ${{ steps.Check_Releases.outputs.skip2 }}
+      #if: ${{ steps.CheckSkips.outputs.skip2 }}
+      if: steps.CheckSkips.outputs.skip2 == 'true'
       run: |
-        echo skip2 == false
+        echo skip2 == true
 
