@@ -40,41 +40,21 @@ jobs:
         echo steps.Check_Releases.outputs.skip2: ${{ steps.Check_Releases.outputs.skip2 }}
 
     - name: Show if skip false
-      if: ${{ steps.Check_Releases.outputs.skip }} == false
-      run: |
-        echo skip == false
-
-    - name: Show if skip true
-      if: ${{ steps.Check_Releases.outputs.skip }} == true
-      run: |
-        echo skip == false
-
-    - name: Show if skip2 false
-      if: ${{ steps.Check_Releases.outputs.skip2 }} == false
-      run: |
-        echo skip2 == false
-
-    - name: Show if skip true
-      if: ${{ steps.Check_Releases.outputs.skip2 }} == true
-      run: |
-        echo skip2 == false
-
-    - name: Show if skip false 2
       if: ${{ ! steps.Check_Releases.outputs.skip }}
       run: |
         echo skip == false
 
-    - name: Show if skip true 2
+    - name: Show if skip true
       if: ${{ steps.Check_Releases.outputs.skip }}
       run: |
         echo skip == false
 
-    - name: Show if skip2 false 2
+    - name: Show if skip2 false
       if: ${{ ! steps.Check_Releases.outputs.skip2 }}
       run: |
         echo skip2 == false
 
-    - name: Show if skip true 2
+    - name: Show if skip2 true
       if: ${{ steps.Check_Releases.outputs.skip2 }}
       run: |
         echo skip2 == false
