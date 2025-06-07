@@ -68,11 +68,22 @@ jobs:
 
     - name: Show1
       run: |
+        set -x
+        set -v
         echo steps.Check_Releases.outputs.skip: ${{ steps.Check_Releases.outputs.skip }}
-        echo "! " steps.Check_Releases.outputs.skip: ! ${{ steps.Check_Releases.outputs.skip }}
+        if ${{ steps.Check_Releases.outputs.skip }}; then
+          echo true
+         else
+          echo false
+        fi
 
     - name: Show2
       if: ! ${{ steps.Check_Releases.outputs.skip }} 
+      run: |
+        echo Not skipped
+
+    - name: Show3
+      if: ${{ ! steps.Check_Releases.outputs.skip }} 
       run: |
         echo Not skipped
 
