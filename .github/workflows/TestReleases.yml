@@ -31,8 +31,8 @@ jobs:
     - name: Check Releases and Skip Rest of Jobs if no new release
       id: Check_Releases
       run: |
-        echo "skip=1" >> $GITHUB_OUTPUT
-        echo "skip2=0" >> $GITHUB_OUTPUT
+        echo "skip=true" >> $GITHUB_OUTPUT
+        echo "skip2=false" >> $GITHUB_OUTPUT
 
     - name: Show
       run: |
@@ -40,22 +40,22 @@ jobs:
         echo steps.Check_Releases.outputs.skip2: ${{ steps.Check_Releases.outputs.skip2 }}
 
     - name: Show if skip false
-      if: ${{ ! steps.Check_Releases.outputs.skip }}
+      if: ${{ steps.Check_Releases.outputs.skip }} == "false"
       run: |
         echo skip == false
 
     - name: Show if skip true
-      if: ${{ steps.Check_Releases.outputs.skip }}
+      if: ${{ steps.Check_Releases.outputs.skip }} == "true"
       run: |
         echo skip == false
 
     - name: Show if skip2 false
-      if: ${{ ! steps.Check_Releases.outputs.skip2 }}
+      if: ${{ steps.Check_Releases.outputs.skip2 }} == "false"
       run: |
         echo skip2 == false
 
     - name: Show if skip2 true
-      if: ${{ steps.Check_Releases.outputs.skip2 }}
+      if: ${{ steps.Check_Releases.outputs.skip2 }} == "true"
       run: |
         echo skip2 == false
 
