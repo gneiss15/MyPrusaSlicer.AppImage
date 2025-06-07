@@ -56,6 +56,8 @@ jobs:
         VERSION=$(head -1 <<< "$(comm -23 Prusa.Releases This.Releases)")
         rm -f "./Prusa.Releases" "./This.Releases"
         
+        VERSION=123
+        
         if [ -z "${VERSION}" ]; then
           echo "No new release found. Skipping rest of workflow."
           echo "skip=true" >> $GITHUB_OUTPUT
