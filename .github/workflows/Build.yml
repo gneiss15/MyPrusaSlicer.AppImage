@@ -30,7 +30,7 @@ jobs:
           echo "$i=$r" >> $GITHUB_ENV
         done
 
-    - name: Check Releases and Skip Rest of Jobs if no new release
+    - name: Check Releases and Skip Rest of Job if no new release
       id: Check_Releases
       run: |
         set -x
