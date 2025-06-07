@@ -31,61 +31,51 @@ jobs:
     - name: Check Releases and Skip Rest of Jobs if no new release
       id: Check_Releases
       run: |
-        set -x
-        set -v
-        GetReleases()
-         {
-          list=$(gh release list -R "$1" --json tagName | jq -r 'map(select(true))[] | (.tagName)' | sed s/version_//g)
-          tmpfile=mktemp
-          touch $tmpfile
-          for i in $list; do
-            if [[ $i != *-* ]] && dpkg --compare-versions $i "ge" "2.9"; then 
-              echo $i >>$tmpfile
-            fi
-          done
-          sort <$tmpfile >$2
-          rm -f $tmpfile
-         }
-         
-        THIS_REPO=$GITHUB_REPOSITORY
-        PRUSA_REPO=prusa3d/PrusaSlicer
-        
-        cd "$GITHUB_WORKSPACE"
-        GetReleases "$PRUSA_REPO" "./Prusa.Releases"
-        GetReleases "$THIS_REPO" "./This.Releases"
-        VERSION=$(head -1 <<< "$(comm -23 Prusa.Releases This.Releases)")
-        rm -f "./Prusa.Releases" "./This.Releases"
-        
-        VERSION=123
-        
-        if [ -z "${VERSION}" ]; then
-          echo "No new release found. Skipping rest of workflow."
-          echo "skip=true" >> $GITHUB_OUTPUT
-         else
-          echo "VERSION=${VERSION}" >> $GITHUB_ENV
-          echo "VERSION=version_${VERSION}" >> $GITHUB_OUTPUT
-          echo "New release found: ${VERSION}"
-          echo "skip=false" >> $GITHUB_OUTPUT
-        fi
+        echo "skip=true" >> $GITHUB_OUTPUT
+        echo "skip2=false" >> $GITHUB_OUTPUT
 
-    - name: Show1
+    - name: Show
       run: |
-        set -x
-        set -v
         echo steps.Check_Releases.outputs.skip: ${{ steps.Check_Releases.outputs.skip }}
-        if ${{ steps.Check_Releases.outputs.skip }}; then
-          echo true
-         else
-          echo false
-        fi
+        echo steps.Check_Releases.outputs.skip2: ${{ steps.Check_Releases.outputs.skip 2}}
 
-    - name: Show2
-      if: ! ${{ steps.Check_Releases.outputs.skip }} 
+    - name: Show if skip false
+      if: ${{ steps.Check_Releases.outputs.skip }} == false
       run: |
-        echo Not skipped
+        echo skip == false
 
-    - name: Show3
-      if: ${{ ! steps.Check_Releases.outputs.skip }} 
+    - name: Show if skip true
+      if: ${{ steps.Check_Releases.outputs.skip }} == true
       run: |
-        echo Not skipped
+        echo skip == false
+
+    - name: Show if skip2 false
+      if: ${{ steps.Check_Releases.outputs.skip2 }} == false
+      run: |
+        echo skip2 == false
+
+    - name: Show if skip true
+      if: ${{ steps.Check_Releases.outputs.skip2 }} == true
+      run: |
+        echo skip2 == false
+
+    - name: Show if skip false 2
+      if: ${{ ! steps.Check_Releases.outputs.skip }}
+      run: |
+        echo skip == false
+
+    - name: Show if skip true 2
+      if: ${{ steps.Check_Releases.outputs.skip }}
+      run: |
+        echo skip == false
+
+    - name: Show if skip2 false 2
+      if: ${{ ! steps.Check_Releases.outputs.skip2 }}
+      run: |
+        echo skip2 == false
+
+    - name: Show if skip true 2
+      if: ${{ steps.Check_Releases.outputs.skip2 }}
+      run: |
+        echo skip2 == false
 
