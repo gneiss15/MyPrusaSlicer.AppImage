@@ -37,7 +37,7 @@ jobs:
     - name: Show
       run: |
         echo steps.Check_Releases.outputs.skip: ${{ steps.Check_Releases.outputs.skip }}
-        echo steps.Check_Releases.outputs.skip2: ${{ steps.Check_Releases.outputs.skip 2}}
+        echo steps.Check_Releases.outputs.skip2: ${{ steps.Check_Releases.outputs.skip2 }}
 
     - name: Show if skip false
       if: ${{ steps.Check_Releases.outputs.skip }} == false
